@@ -1,0 +1,33 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: 'hashicorp/terraform:latest'
+    steps:
+      - checkout
+      - run:
+          name: Running lint
+          command: terraform fmt -check -recursive
+  publish:
+    docker:
+      - image: 'circleci/node:latest'
+    steps:
+      - checkout
+      - run:
+          name: Installing Semantic Release
+          command: npm install semantic-release @semantic-release/changelog @semantic-release/git
+      - run:
+          name: Publishing modules
+          command: npx semantic-release
+workflows:
+  version: 2
+  test_and_publish:
+    jobs:
+      - test
+      - publish:
+          context: semantic-release
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
