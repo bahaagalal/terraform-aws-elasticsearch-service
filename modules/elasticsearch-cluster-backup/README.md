@@ -1,6 +1,6 @@
 # Elasticsearch Cluster Backup Module
 
-This terraform module takes snapshots of an Elasticsearch cluster to an S3 bucket. The module is a scheduled lambda function that calls the elasticsearch APIs to perform snapshotting and backup related tasks documented [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html).
+This terraform module takes snapshots of an Elasticsearch cluster to an S3 bucket. The module is a scheduled lambda function that calls the elasticsearch APIs to perform snapshotting and backup related tasks documented [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html). It also deploys another lambda function that allows you to query the snapshot API on demand.
 
 ---
 

@@ -10,7 +10,14 @@ locals {
     },
     var.tags
   )
-  lambda_filename = "snapshot_lambda_function.zip"
+  snapshot_lambda_filename = "snapshot_lambda_function.zip"
+  query_lambda_filename    = "query_lambda_function.zip"
+  lambda_env = {
+    REGION                        = var.region
+    ELASTICSEARCH_DOMAIN_ENDPOINT = data.aws_elasticsearch_domain.elasticsearch_domain.endpoint
+    BUCKET                        = data.aws_s3_bucket.s3_bucket.id
+    ROLE                          = aws_iam_role.elasticsearch_domain_iam_role.arn
+  }
 }
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -176,8 +183,8 @@ data "aws_iam_policy_document" "lambda_elasticsearch_http_policy_document" {
 
 data "archive_file" "lambda_code" {
   type        = "zip"
-  source_dir  = "${path.module}/code"
-  output_path = "${path.module}/files/${local.lambda_filename}"
+  source_dir  = "${path.module}/snapshot/code"
+  output_path = "${path.module}/snapshot/files/${local.snapshot_lambda_filename}"
 }
 
 resource "aws_lambda_function" "lambda_function" {
@@ -192,17 +199,12 @@ resource "aws_lambda_function" "lambda_function" {
   reserved_concurrent_executions = 1
 
   runtime          = "nodejs12.x"
-  filename         = "${path.module}/files/${local.lambda_filename}"
+  filename         = "${path.module}/snapshot/files/${local.snapshot_lambda_filename}"
   source_code_hash = data.archive_file.lambda_code.output_base64sha256
   handler          = "index.handler"
 
   environment {
-    variables = {
-      REGION                        = var.region
-      ELASTICSEARCH_DOMAIN_ENDPOINT = data.aws_elasticsearch_domain.elasticsearch_domain.endpoint
-      BUCKET                        = data.aws_s3_bucket.s3_bucket.id
-      ROLE                          = aws_iam_role.elasticsearch_domain_iam_role.arn
-    }
+    variables = local.lambda_env
   }
 
   tags = local.tags
@@ -236,4 +238,37 @@ resource "aws_lambda_permission" "lambda_permission" {
   function_name = aws_lambda_function.lambda_function.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.cloudwatch_event_rule.arn
+}
+
+# ------------------------------------------------------------------------------------------------------------------
+# CREATE LAMBDA FUNCTION TO QUERY THE SNAPSHOT API ON THE ELASTICSEARCH DOMAIN
+# ------------------------------------------------------------------------------------------------------------------
+
+data "archive_file" "query_lambda_code" {
+  type        = "zip"
+  source_dir  = "${path.module}/query/code"
+  output_path = "${path.module}/query/files/${local.query_lambda_filename}"
+}
+
+resource "aws_lambda_function" "query_lambda_function" {
+  function_name = "${var.name}-query"
+  description   = "A lambda function to query the elasticsearch snapshots APIs on ${var.elasticsearch_domain}."
+
+  role = aws_iam_role.lambda_iam_role.arn
+
+  memory_size = var.lambda_memory_size
+  timeout     = var.lambda_timeout
+
+  reserved_concurrent_executions = 1
+
+  runtime          = "nodejs12.x"
+  filename         = "${path.module}/query/files/${local.query_lambda_filename}"
+  source_code_hash = data.archive_file.query_lambda_code.output_base64sha256
+  handler          = "index.handler"
+
+  environment {
+    variables = local.lambda_env
+  }
+
+  tags = local.tags
 }
