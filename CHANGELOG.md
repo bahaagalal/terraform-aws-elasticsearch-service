@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/compare/v1.0.0...v1.1.0) (2020-10-06)
+
+
+### Features
+
+* add lambda function to query the snapshots api on demand ([#2](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/issues/2)) ([4768bbd](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/commit/4768bbd506ae611418433c777b9348a3a625da18))
+
 # 1.0.0 (2020-09-30)
 
 
