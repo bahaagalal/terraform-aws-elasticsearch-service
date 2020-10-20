@@ -250,6 +250,19 @@ data "archive_file" "query_lambda_code" {
   output_path = "${path.module}/query/files/${local.query_lambda_filename}"
 }
 
+data "aws_subnet_ids" "vpc_subnets" {
+  vpc_id = var.vpc_id
+}
+
+data "aws_security_groups" "vpc_security_groups" {
+  count = var.vpc_id == "" ? 0 : 1
+
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+}
+
 resource "aws_lambda_function" "query_lambda_function" {
   function_name = "${var.name}-query"
   description   = "A lambda function to query the elasticsearch snapshots APIs on ${var.elasticsearch_domain}."
@@ -266,9 +279,20 @@ resource "aws_lambda_function" "query_lambda_function" {
   source_code_hash = data.archive_file.query_lambda_code.output_base64sha256
   handler          = "index.handler"
 
+  dynamic "vpc_config" {
+    for_each = var.vpc_id == "" ? [] : list(var.vpc_id)
+
+    content {
+      subnet_ids         = data.aws_subnet_ids.vpc_subnets.ids
+      security_group_ids = data.aws_security_groups.vpc_security_groups.ids
+    }
+  }
+
   environment {
     variables = local.lambda_env
   }
+
+
 
   tags = local.tags
 }

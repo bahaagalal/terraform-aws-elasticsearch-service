@@ -35,4 +35,5 @@ module "elasticsearch_cluster_backup" {
   region                = var.region
   schedule_time         = var.schedule_time
   tags                  = var.tags
+  vpc_id                = var.vpc_id
 }

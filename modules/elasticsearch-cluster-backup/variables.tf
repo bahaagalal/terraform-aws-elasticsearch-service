@@ -63,6 +63,12 @@ variable "enable_lambda_scheduled_event" {
   default     = true
 }
 
+variable "vpc_id" {
+  description = "The VPC in which lambda will run."
+  type        = string
+  default     = ""
+}
+
 variable "tags" {
   description = "The tags that should be associated with the resources created by this module."
   type        = map(string)

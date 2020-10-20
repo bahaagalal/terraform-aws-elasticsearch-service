@@ -14,11 +14,13 @@
 variable "elasticsearch_domain" {
   description = "The name for the elasticsearch domain."
   type        = string
+  default = "web-firehose"
 }
 
 variable "elasticsearch_indices" {
   description = "A list of elasticsearch indices to take snapshots for."
   type        = list(string)
+  default = ["forums-2020-05-31"]
 }
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -42,6 +44,12 @@ variable "region" {
   description = "The region where the s3 bucket exists."
   type        = string
   default     = "us-east-1"
+}
+
+variable "vpc_id" {
+  description = "The VPC ID to which lambda will have access for."
+  type        = string
+  default     = ""
 }
 
 variable "schedule_time" {
