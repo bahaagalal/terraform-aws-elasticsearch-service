@@ -292,7 +292,5 @@ resource "aws_lambda_function" "query_lambda_function" {
     variables = local.lambda_env
   }
 
-
-
   tags = local.tags
 }
