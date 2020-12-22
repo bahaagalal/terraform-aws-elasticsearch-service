@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/compare/v1.1.0...v1.2.0) (2020-12-22)
+
+
+### Features
+
+* Add cluster module ([#6](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/issues/6)) ([b72ff17](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/commit/b72ff1790ecbc5ea8115b842213482c9a5a973f3))
+
 # [1.1.0](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/compare/v1.0.0...v1.1.0) (2020-10-06)
 
 
