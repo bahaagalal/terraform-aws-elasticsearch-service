@@ -18,7 +18,7 @@ The main module of this repo is
 
 This repo contain several supporting modules that add extra functionality on top of the `elasticsearch-cluster` module:
 
-- **[elasticsearch-cluster-backup](./modules/elasticsearch-cluster-backup/)**: Creates a scheduled lambda function that calls the Elasticsearch API to perform snapshotting and backup related tasks documented [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html).
+- **[elasticsearch-cluster-backup-restore](./modules/elasticsearch-cluster-backup-restore/)**: Creates two lambda functions; a scheduled lambda function that calls the Elasticsearch API to perform snapshotting and backup related tasks, and a second lambda function that calls the Elasticsearch API to perform restore related tasks.
 
 ---
 
