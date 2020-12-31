@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/compare/v1.2.0...v2.0.0) (2020-12-31)
+
+
+### Features
+
+* Add Backup and Restore Module ([#7](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/issues/7)) ([7d07d05](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/commit/7d07d050d69fb986c78c3f1a722e4c3739f3ccda))
+
+
+### BREAKING CHANGES
+
+* This is incompatible with the previous version of the backup module
+
 # [1.2.0](https://github.com/crowdanalyzer/terraform-aws-elasticsearch-service/compare/v1.1.0...v1.2.0) (2020-12-22)
 
 
